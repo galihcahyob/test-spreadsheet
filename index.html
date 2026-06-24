@@ -110,6 +110,31 @@
             outline: 2px solid var(--primary);
         }
 
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            background-color: #1e293b;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed #475569;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            margin: 0;
+            font-size: 14px;
+            color: #cbd5e1;
+            cursor: pointer;
+            user-select: none;
+        }
+
         .submit-btn {
             width: 100%;
             padding: 12px;
@@ -183,6 +208,12 @@
                     <label>5. Apa tantangan terbesar kamu saat belajar coding?</label>
                     <input type="text" required placeholder="Ketik tantanganmu...">
                 </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="agree-pria" required>
+                    <label for="agree-pria">Saya menyatakan data yang saya isi di atas sudah benar dan jujur.</label>
+                </div>
+
                 <button type="submit" class="submit-btn btn-men">Kirim Data Pria</button>
             </form>
         </div>
@@ -220,30 +251,70 @@
                     <label>5. Apa target atau impianmu setelah menguasai skill IT?</label>
                     <input type="text" required placeholder="Ketik impianmu...">
                 </div>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="agree-wanita" required>
+                    <label for="agree-wanita">Saya menyatakan data yang saya isi di atas sudah benar dan jujur.</label>
+                </div>
+
                 <button type="submit" class="submit-btn btn-women">Kirim Data Wanita</button>
             </form>
         </div>
     </div>
 
     <script>
-        // Fungsi untuk pindah halaman tanpa reload
         function switchPage(pageId, btnElement) {
-            // Sembunyikan semua halaman
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            // Hilangkan status aktif pada semua tombol
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // Tampilkan halaman yang dipilih
             document.getElementById(pageId).classList.add('active');
-            // Aktifkan tombol yang diklik
             btnElement.classList.add('active');
         }
 
-        // Fungsi sementara ketika tombol kirim ditekan
         function submitForm(event, kategori) {
             event.preventDefault();
-            alert('Terima kasih! Kuesioner ' + kategori + ' berhasil dikirim (Simulasi Frontend).');
-            event.target.reset(); // Reset isi form
+            
+            const form = event.target;
+            // Memilih input text dan select saja, mengabaikan input checkbox agar index data tidak berantakan
+            const inputs = form.querySelectorAll('input:not([type="checkbox"]), select');
+            
+            const formData = {
+                kategori: kategori,
+                q1: inputs[0].value,
+                q2: inputs[1].value,
+                q3: inputs[2].value,
+                q4: inputs[3].value,
+                q5: inputs[4].value
+            };
+
+            // MASUKKAN URL WEB APP GAS KAMU DI SINI
+            const webAppUrl = "https://script.google.com/macros/s/AKfycbw6dSS3ut4ucbI3FDf4-zrxLf8lulA-kg9nXxEWOFmeJmpsRPY96voxeoUSn2dMYsER/exec";
+
+            const submitBtn = form.querySelector('.submit-btn');
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Mengirim...";
+            submitBtn.disabled = true;
+
+            fetch(webAppUrl, {
+                method: "POST",
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.status === "success") {
+                    alert('Terima kasih! Kuesioner ' + kategori + ' berhasil disimpan di sheet Answer' + kategori + '.');
+                    form.reset();
+                } else {
+                    alert('Gagal menyimpan: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan jaringan atau CORS.');
+            })
+            .finally(() => {
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            });
         }
     </script>
 </body>
