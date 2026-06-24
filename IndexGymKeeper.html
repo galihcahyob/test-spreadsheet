@@ -1,0 +1,3686 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byoming Bloom - Gym Keeper System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- VARIABEL & RESET --- */
+        :root {
+            --primary-dark: #321f05;
+            --primary-medium: #846141;
+            --primary-light: #ddd3c4;
+            --accent-color: #d4a76a;
+            --text-dark: #333;
+            --bg-color: #f9f7f3;
+            --sidebar-width: 280px;
+            --sidebar-collapsed: 70px;
+            --header-height: 70px;
+            --shadow: 0 10px 30px rgba(50, 31, 5, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(221, 211, 196, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(132, 97, 65, 0.1) 0%, transparent 20%);
+        }
+
+        /* --- CONTAINER UTAMA UNTUK LOGIN --- */
+        .main-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            position: relative;
+        }
+
+        /* --- HALAMAN LOGIN --- */
+        .login-container {
+            display: flex;
+            width: 100%;
+            min-height: 650px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background-color: white;
+            transition: var(--transition);
+        }
+
+        .left-section {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-medium) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: var(--primary-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .left-section::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(221, 211, 196, 0.05);
+            top: -100px;
+            right: -100px;
+        }
+        .left-section::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(212, 167, 106, 0.05);
+            bottom: -80px;
+            left: -80px;
+        }
+
+        .brand-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+            z-index: 1;
+            text-align: center;
+        }
+        .logo-icon {
+            font-size: 3.5rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+        }
+        .company-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: white;
+            margin-bottom: 5px;
+        }
+        .company-tagline {
+            font-size: 1rem;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .gym-keeper-badge {
+            background-color: rgba(212, 167, 106, 0.2);
+            padding: 12px 25px;
+            border-radius: 50px;
+            margin: 20px 0;
+            border: 1px solid rgba(212, 167, 106, 0.3);
+            z-index: 1;
+        }
+        .gym-keeper-badge i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        .gym-illustration {
+            max-width: 85%;
+            margin: 30px 0;
+            z-index: 1;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+        }
+
+        .left-section h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 20px;
+            z-index: 1;
+        }
+        .left-section p {
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 450px;
+            opacity: 0.9;
+            z-index: 1;
+        }
+        .right-section {
+            flex: 1;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: white;
+        }
+
+        .login-header {
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            color: var(--primary-dark);
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .login-header .subtitle {
+            color: var(--primary-medium);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i:first-child {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-medium);
+            font-size: 1.1rem;
+        }
+
+        .form-control-login {
+            width: 100%;
+            padding: 16px 50px 16px 50px;
+            border: 2px solid var(--primary-light);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: var(--transition);
+            background-color: #fefefe;
+        }
+
+        .form-control-login:focus {
+            outline: none;
+            border-color: var(--primary-medium);
+            box-shadow: 0 0 0 3px rgba(132, 97, 65, 0.1);
+        }
+
+        .password-wrapper {
+            position: relative;
+            display: block;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--primary-medium);
+            cursor: pointer;
+            font-size: 1.1rem;
+            z-index: 10;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary-dark);
+            background-color: rgba(132, 97, 65, 0.1);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+            accent-color: var(--primary-medium);
+        }
+
+        .forgot-password {
+            color: var(--primary-medium);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, var(--primary-dark), var(--primary-medium));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(132, 97, 65, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(to right, #241703, #6a4e34);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(132, 97, 65, 0.3);
+        }
+
+        .login-btn i {
+            margin-right: 10px;
+        }
+
+        .access-info {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: rgba(221, 211, 196, 0.2);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-medium);
+        }
+
+        .access-info h4 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .access-info h4 i {
+            margin-right: 8px;
+            color: var(--primary-medium);
+        }
+
+        .access-info p {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .demo-accounts {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(221, 211, 196, 0.2);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-medium);
+        }
+
+        .demo-accounts h4 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .demo-accounts p {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .demo-accounts strong {
+            color: var(--primary-medium);
+        }
+
+        /* --- DASHBOARD LAYOUT BARU (FULLSCREEN) --- */
+        .dashboard-container {
+            display: none;
+            min-height: 100vh;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: white;
+        }
+
+        /* SIDEBAR */
+        .dashboard-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary-dark) 0%, #4a2f15 100%);
+            color: white;
+            z-index: 100;
+            transition: var(--transition);
+            overflow-y: auto;
+            padding-bottom: 20px;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sidebar-logo {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+        }
+
+        .sidebar-title h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .sidebar-title span {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-left-color: rgba(212, 167, 106, 0.5);
+        }
+
+        .nav-item.active {
+            background: rgba(212, 167, 106, 0.15);
+            color: var(--accent-color);
+            border-left-color: var(--accent-color);
+        }
+
+        .nav-item i {
+            width: 24px;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+
+        .nav-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* MAIN CONTENT AREA */
+        .dashboard-main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            transition: var(--transition);
+        }
+
+        /* Smooth scrolling */
+        #pageNewMember .page-content,
+        .dashboard-main {
+            scroll-behavior: smooth;
+        }
+
+        /* HEADER */
+        .content-header {
+            height: var(--header-height);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title h1 {
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .back-to-menu {
+            background: transparent;
+            border: none;
+            color: var(--primary-medium);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .back-to-menu:hover {
+            background-color: rgba(132, 97, 65, 0.1);
+            color: var(--primary-dark);
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--primary-medium);
+        }
+
+        .logout-btn {
+            background: var(--primary-dark);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #241703;
+        }
+
+        /* CONTENT BODY */
+        .content-body {
+            padding: 30px;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        /* DASHBOARD HOME (Menu Grid) */
+        .dashboard-home {
+            display: block;
+        }
+
+        .welcome-text {
+            margin-bottom: 40px;
+            color: var(--primary-dark);
+        }
+
+        .welcome-text h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .menu-card {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(132, 97, 65, 0.15);
+            border-color: var(--accent-color);
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-medium), var(--accent-color));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .menu-card:hover::before {
+            opacity: 1;
+        }
+
+        .menu-icon-circle {
+            width: 70px;
+            height: 70px;
+            background: rgba(212, 167, 106, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            transition: var(--transition);
+        }
+
+        .menu-card:hover .menu-icon-circle {
+            background: var(--primary-medium);
+        }
+
+        .menu-card i {
+            font-size: 1.8rem;
+            color: var(--primary-medium);
+            transition: var(--transition);
+        }
+
+        .menu-card:hover i {
+            color: white;
+        }
+
+        .menu-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .menu-desc {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* CONTENT PAGES */
+        .content-page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        #pageNewMember .page-content {
+            max-height: calc(110vh - 200px);
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        /* Custom scrollbar untuk form */
+        #pageNewMember .page-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #pageNewMember .page-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        #pageNewMember .page-content::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        #pageNewMember .page-content::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-medium);
+        }
+
+        /* FORM STYLES */
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        .section-title {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title i {
+            color: var(--primary-medium);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            transition: var(--transition);
+            background-color: white;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-medium);
+            box-shadow: 0 0 0 3px rgba(132, 97, 65, 0.1);
+        }
+        .form-control:disabled {
+            background-color: #f5f5f5;
+            color: #777;
+            cursor: not-allowed;
+        }
+        .form-control-idNumber {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            text-align: center;
+            color: var(--text-dark);
+            transition: var(--transition);
+            background-color: white;
+        }
+        .form-control-idNumber:focus {
+            outline: none;
+            border-color: var(--primary-medium);
+            box-shadow: 0 0 0 3px rgba(132, 97, 65, 0.1);
+        }
+        .form-control-idNumber:disabled {
+            background-color: #f5f5f5;
+            color: #777;
+            cursor: not-allowed;
+        }
+
+        /* DISABLED STATE WITH TOOLTIP */
+        .form-control:disabled,
+        .form-control-idNumber:disabled,
+        select:disabled {
+            background-color: #f8f9fa !important;
+            color: #adb5bd !important;
+            border-color: #dee2e6 !important;
+            cursor: not-allowed !important;
+            position: relative;
+        }
+
+        /* TOOLTIP STYLES FOR DISABLED FIELDS */
+        .disabled-with-hint {
+            position: relative;
+        }
+
+        .disabled-with-hint::after {
+            content: attr(data-hint);
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            pointer-events: none;
+        }
+
+        .disabled-with-hint::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--primary-dark) transparent transparent transparent;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .disabled-with-hint:hover::after,
+        .disabled-with-hint:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* HIGHLIGHT FOR REQUIRED FIELDS */
+        .required-field-highlight {
+            border-color: #ffc107 !important;
+            background-color: #fffcf3 !important;
+        }
+
+        .required-field-highlight:focus {
+            border-color: #ffc107 !important;
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25) !important;
+        }
+
+        /* Identity Information Grid Layout */
+        .identity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .identity-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Membership Plan Grid Layout */
+        .membership-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .plan-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Code Panel (Panel Kanan) */
+        .code-panel {
+            background: rgba(221, 211, 196, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid rgba(132, 97, 65, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: fit-content;
+        }
+
+        .code-panel .form-group {
+            margin-bottom: 0;
+        }
+
+        .code-panel .form-text {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Generate Button */
+        .generate-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .generate-btn:hover {
+            background: #c1955a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(132, 97, 65, 0.2);
+        }
+
+        .generate-btn .fa-spinner {
+            margin: 0;
+        }
+
+        /* Plan Subsection Styling */
+        .plan-subsection {
+            background: #f9f7f3;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e8e0d5;
+        }
+
+        .subsection-title {
+            color: var(--primary-medium);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e8e0d5;
+        }
+
+        /* Inline Group */
+        .inline-group {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .inline-group .form-group {
+            flex: 1;
+        }
+
+        .session-select {
+            min-width: 140px;
+        }
+
+        /* Payment Grid Layout */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        /* Compact Fee Summary */
+        .fee-summary-compact {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e8e0d5;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .fee-breakdown {
+            margin-bottom: 20px;
+        }
+
+        /* MINIMAL FEE STATE STYLES */
+        .minimal-fee-state {
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .empty-state {
+            padding: 20px;
+            background-color: rgba(221, 211, 196, 0.1);
+            border-radius: 10px;
+            border: 1px dashed var(--primary-light);
+        }
+
+        .empty-state i {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Enhanced disabled states */
+        .code-display:disabled {
+            background-color: #f5f5f5;
+            color: #999;
+            border-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6 !important;
+            cursor: not-allowed !important;
+            background: #aaa !important;
+        }
+
+        .generate-btn:disabled:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .fee-item.detailed {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .fee-label-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fee-desc {
+            color: #888;
+            font-size: 0.8rem;
+            margin-top: 2px;
+            font-style: italic;
+        }
+
+        .fee-value.subtotal {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1rem;
+        }
+
+        .fee-value.discount {
+            color: #28a745;
+            font-weight: 700;
+        }
+
+        .fee-divider.light {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+            margin: 10px 0;
+        }
+
+        .fee-divider.bold {
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary-medium), var(--primary-light));
+            margin: 15px 0;
+        }
+
+        .total-label-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .total-desc {
+            font-size: 0.8rem;
+            color: var(--primary-medium);
+            font-weight: 500;
+            margin-top: 3px;
+        }
+
+        .total-value-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .total-note {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 3px;
+            font-style: italic;
+        }
+
+        /* Session select disabled state */
+        .session-select select:disabled {
+            background-color: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+            border-color: #ddd;
+        }
+
+        .session-select select:disabled + .form-text {
+            color: #aaa;
+        }
+
+        .fee-header {
+            background: linear-gradient(90deg, var(--primary-medium), var(--primary-dark));
+            color: white;
+            padding: 15px 20px;
+        }
+
+        .fee-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fee-body {
+            padding: 20px;
+        }
+
+        .fee-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .fee-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .fee-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .fee-value {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        .fee-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+            margin: 15px 0;
+        }
+
+        .discount-item .fee-value {
+            color: #28a745;
+            font-weight: 700;
+        }
+
+        .fee-total {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid var(--primary-medium);
+        }
+
+        .total-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .total-label {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+        }
+
+        .total-value {
+            font-weight: 800;
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+        }
+
+        /* Payment Method */
+        .payment-method {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .payment-method .form-group {
+            margin-bottom: 0;
+        }
+
+        .payment-method select {
+            max-width: 100%;
+        }
+
+        /* Payment Card Style */
+        .payment-card {
+            background: linear-gradient(135deg, #f9f7f3 0%, #f0ebe3 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(212, 167, 106, 0.3);
+            box-shadow: 0 4px 12px rgba(50, 31, 5, 0.08);
+            transition: var(--transition);
+        }
+
+        .payment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(50, 31, 5, 0.12);
+            border-color: rgba(212, 167, 106, 0.5);
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed rgba(132, 97, 65, 0.2);
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-medium), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .payment-title {
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .payment-subtitle {
+            color: var(--primary-medium);
+            font-size: 0.9rem;
+            margin-top: 2px;
+        }
+
+        /* ENHANCED PAYMENT SELECT */
+        .enhanced-select-wrapper {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .enhanced-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e8e0d5;
+            border-radius: 10px;
+            background-color: white;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23846141' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+        .enhanced-select:focus {
+            outline: none;
+            border-color: var(--primary-medium);
+            box-shadow: 0 0 0 3px rgba(132, 97, 65, 0.15);
+        }
+
+        .enhanced-select:disabled {
+            background-color: #f8f9fa;
+            color: #adb5bd;
+            border-color: #dee2e6;
+            cursor: not-allowed;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23adb5bd' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        }
+
+        /* Payment Method Icons in Select Options */
+        .payment-option-cash::before {
+            content: "💵 ";
+        }
+
+        .payment-option-debit::before {
+            content: "💳 ";
+        }
+
+        .payment-option-credit::before {
+            content: "💳 ";
+        }
+
+        .payment-option-transfer::before {
+            content: "🏦 ";
+        }
+
+        .payment-option-ewallet::before {
+            content: "📱 ";
+        }
+
+        /* Payment Status */
+        .payment-status {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: rgba(40, 167, 69, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-status i {
+            color: #28a745;
+            font-size: 1.1rem;
+        }
+
+        .payment-status span {
+            color: #155724;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Code Display */
+        .code-display {
+            flex: 1;
+            background: #f0f0f0;
+            padding: 11px 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            text-align: center;
+            letter-spacing: 1px;
+            min-width: 160px;
+            border: 2px solid #e0e0e0;
+            cursor: default !important;
+            user-select: all;
+            -webkit-user-select: all;
+            -moz-user-select: all;
+            -ms-user-select: all;
+        }
+
+        .code-display:focus {
+            outline: none;
+            border-color: #e0e0e0;
+            box-shadow: none;
+        }
+
+        /* CHECKBOX & BUTTONS */
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .form-check input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-medium);
+        }
+
+        .form-check label {
+            color: var(--text-dark);
+            font-weight: normal;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-clear {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .btn-clear:hover {
+            background: #e9ecef;
+            color: var(--text-dark);
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-medium), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #6a4e34, #241703);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(132, 97, 65, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #c1955a;
+        }
+
+        /* ANIMATIONS */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        /* MESSAGE TOAST */
+        .message-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-width: 350px;
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+            transition: opacity 0.5s ease;
+        }
+
+        .message-success {
+            background-color: #28a745;
+        }
+
+        .message-error {
+            background-color: #dc3545;
+        }
+
+        .message-info {
+            background-color: #321f05;
+        }
+
+        /* ============================================
+        RESPONSIVE DESIGN
+        ============================================ */
+
+        @media (max-width: 1200px) {
+            .identity-grid,
+            .membership-grid,
+            .payment-grid {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-sidebar {
+                width: var(--sidebar-collapsed);
+            }
+            
+            .dashboard-main {
+                margin-left: var(--sidebar-collapsed);
+            }
+            
+            .nav-text, .sidebar-title span, .sidebar-title h3 {
+                display: none;
+            }
+            
+            .sidebar-header {
+                justify-content: center;
+                padding: 25px 10px;
+            }
+            
+            .nav-item {
+                justify-content: center;
+                padding: 15px;
+            }
+            
+            .nav-item i {
+                margin-right: 0;
+                font-size: 1.3rem;
+            }
+            
+            .sidebar-footer {
+                display: none;
+            }
+            
+            /* Form Responsive */
+            .identity-grid,
+            .membership-grid,
+            .payment-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .code-panel {
+                order: -1; /* Move code panel to top on mobile */
+            }
+        }
+
+        @media (max-width: 900px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 500px;
+            }
+            
+            .dash-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .user-info {
+                text-align: center;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-body {
+                padding: 20px;
+            }
+            
+            .content-header {
+                padding: 0 20px;
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+            }
+            
+            .page-title {
+                margin-bottom: 15px;
+            }
+            
+            .user-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .inline-group {
+                flex-direction: column;
+            }
+            
+            .inline-group .form-group {
+                width: 100%;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            /* Form Mobile Optimizations */
+            .identity-panel,
+            .plan-panel,
+            .code-panel {
+                gap: 15px;
+            }
+            
+            .plan-subsection {
+                padding: 15px;
+            }
+            
+            .fee-body {
+                padding: 15px;
+            }
+            
+            .session-select {
+                min-width: 100%;
+            }
+            
+            .fee-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .payment-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .right-section {
+                padding: 40px 25px;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-section {
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+            }
+            
+            .page-content {
+                padding: 20px;
+            }
+            
+            .code-panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HALAMAN LOGIN (Container di tengah seperti semula) -->
+    <div class="main-wrapper" id="loginWrapper">
+        <div class="login-container fade-in" id="loginPage">
+            <div class="left-section">
+                <div class="brand-logo">
+                    <i class="fas fa-dumbbell logo-icon"></i>
+                    <div class="company-name">BYOMING BLOOM</div>
+                    <div class="company-tagline">Excellence in Fitness</div>
+                </div>
+                <div class="gym-keeper-badge">
+                    <i class="fas fa-user-shield"></i>
+                    <span>GYM KEEPER ACCESS PORTAL</span>
+                </div>
+                <h1>Management System Terintegrasi</h1>
+                <p>Akses dashboard untuk New Member, Renewals, PT, Check-in, dan Reminder.</p>
+                <svg class="gym-illustration" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="80" y="180" width="240" height="20" rx="10" fill="#d4a76a"/>
+                    <rect x="60" y="150" width="40" height="30" rx="5" fill="#846141"/>
+                    <rect x="300" y="150" width="40" height="30" rx="5" fill="#846141"/>
+                    <circle cx="200" cy="100" r="70" fill="#ddd3c4"/>
+                    <circle cx="200" cy="100" r="60" fill="#f8f9fa"/>
+                    <path d="M160,100 a40,40 0 1,0 80,0 a40,40 0 1,0 -80,0" fill="#321f05"/>
+                    <rect x="190" y="70" width="20" height="60" rx="5" fill="#846141"/>
+                    <rect x="170" y="120" width="60" height="20" rx="5" fill="#846141"/>
+                    <circle cx="170" cy="60" r="10" fill="#d4a76a"/>
+                    <circle cx="230" cy="60" r="10" fill="#d4a76a"/>
+                    <path d="M120,220 L140,180 L160,190 L140,230 Z" fill="#846141" opacity="0.8"/>
+                    <path d="M280,220 L260,180 L240,190 L260,230 Z" fill="#846141" opacity="0.8"/>
+                    <!-- Key symbol for Gym Keeper -->
+                    <path d="M340,80 L360,80 L360,100 L340,100 Z" fill="#321f05"/>
+                    <circle cx="350" cy="70" r="8" fill="#d4a76a"/>
+                </svg>
+                <p class="pulse" style="font-size: 0.9rem; margin-top: 20px; color: #d4a76a;">
+                    <i class="fas fa-lock"></i> Akses aman & terenkripsi
+                </p>
+            </div>
+    
+            <div class="right-section">
+                <div class="login-header">
+                    <h2>Login Gym Keeper</h2>
+                    <p class="subtitle">Hanya untuk staf operasional Byoming Bloom</p>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username Gym Keeper</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user-tie"></i>
+                            <input type="text" id="username" class="form-control-login" placeholder="Masukkan username" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon password-wrapper">
+                            <i class="fas fa-key"></i>
+                            <input type="password" id="password" class="form-control-login" placeholder="Masukkan password" required>
+                            <button type="button" class="toggle-password" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Ingat saya</label>
+                        </div>
+                        <a href="#" class="forgot-password">Lupa password?</a>
+                    </div>
+                    
+                    <button type="submit" class="login-btn" id="loginButton">
+                        <i class="fas fa-sign-in-alt"></i> Masuk Dashboard
+                    </button>
+                    
+                    <div class="access-info">
+                        <h4><i class="fas fa-info-circle"></i> Informasi Akses:</h4>
+                        <p>Halaman ini khusus untuk <strong>Gym Keeper</strong> Byoming Bloom. Akses untuk personal trainer dan staf lain tersedia di portal berbeda.</p>
+                        <p style="margin-top: 8px; font-size: 0.85rem;"><i class="fas fa-exclamation-triangle"></i> Pastikan Anda memiliki hak akses yang valid sebelum login.</p>
+                    </div>
+                    <div class="demo-accounts">
+                        <h4><i class="fas fa-info-circle"></i> Akun Demo untuk Testing:</h4>
+                        <p><strong>Gym Keeper:</strong> gymkeeper / byoming2026</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HALAMAN DASHBOARD (Fullscreen dengan sidebar) -->
+    <div class="dashboard-container" id="dashboardPage">
+        <!-- SIDEBAR MENU -->
+        <div class="dashboard-sidebar" id="dashboardSidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-dumbbell sidebar-logo"></i>
+                <div class="sidebar-title">
+                    <h3>BYOMING BLOOM</h3>
+                    <span>GYM KEEPER</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-nav">
+                <a class="nav-item active" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-text">Dashboard Home</span>
+                </a>
+                <a class="nav-item" data-page="newMember">
+                    <i class="fas fa-user-plus"></i>
+                    <span class="nav-text">Form New Member</span>
+                </a>
+                <a class="nav-item" data-page="renewals">
+                    <i class="fas fa-sync-alt"></i>
+                    <span class="nav-text">Form Renewals</span>
+                </a>
+                <a class="nav-item" data-page="ptClass">
+                    <i class="fas fa-running"></i>
+                    <span class="nav-text">Add PT / Class</span>
+                </a>
+                <a class="nav-item" data-page="checkIn">
+                    <i class="fas fa-qrcode"></i>
+                    <span class="nav-text">Visit (Check-in)</span>
+                </a>
+                <a class="nav-item" data-page="reminder">
+                    <i class="fas fa-bell"></i>
+                    <span class="nav-text">Reminder</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div style="font-size: 0.8rem; opacity: 0.7; text-align: center;">
+                    <p>Version 1.0.0</p>
+                    <p>© 2026 Byoming Bloom</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MAIN CONTENT AREA -->
+        <div class="dashboard-main" id="dashboardMain">
+            <!-- HEADER -->
+            <div class="content-header">
+                <div class="page-title">
+                    <button class="back-to-menu" id="backToMenu" style="display: none;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <h1 id="pageTitle">Dashboard Home</h1>
+                </div>
+                
+                <div class="user-controls">
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Gym Keeper 1</div>
+                        <div class="user-role" id="userRole">ID: BMG_GK-001</div>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            
+            <!-- CONTENT BODY -->
+            <div class="content-body">
+                <!-- DASHBOARD HOME (Default) -->
+                <div class="content-page dashboard-home" id="pageHome">
+                    <div class="welcome-text">
+                        <h2 id="welcomeUserName">Halo, Gym Keeper!</h2>
+                        <p>Silakan pilih menu operasional di bawah ini:</p>
+                    </div>
+                    
+                    <div class="menu-grid">
+                        <!-- MENU 1: FORM NEW MEMBER -->
+                        <div class="menu-card" data-page="newMember">
+                            <div class="menu-icon-circle">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="menu-title">Form New Member</div>
+                            <div class="menu-desc">Registrasi anggota baru & kontrak</div>
+                        </div>
+                        
+                        <!-- MENU 2: FORM RENEWALS -->
+                        <div class="menu-card" data-page="renewals">
+                            <div class="menu-icon-circle">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <div class="menu-title">Form Renewals</div>
+                            <div class="menu-desc">Perpanjangan keanggotaan</div>
+                        </div>
+                        
+                        <!-- MENU 3: FORM PT/CLASS -->
+                        <div class="menu-card" data-page="ptClass">
+                            <div class="menu-icon-circle">
+                                <i class="fas fa-running"></i>
+                            </div>
+                            <div class="menu-title">Add PT / Class</div>
+                            <div class="menu-desc">Booking sesi PT atau Kelas</div>
+                        </div>
+                        
+                        <!-- MENU 4: VISIT CHECK-IN -->
+                        <div class="menu-card" data-page="checkIn">
+                            <div class="menu-icon-circle">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <div class="menu-title">Visit (Check-in)</div>
+                            <div class="menu-desc">Absen hadir membership/user</div>
+                        </div>
+                        
+                        <!-- MENU 5: REMINDER -->
+                        <div class="menu-card" data-page="reminder">
+                            <div class="menu-icon-circle">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="menu-title">Reminder</div>
+                            <div class="menu-desc">Notifikasi jatuh tempo & follow-up</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PAGE: FORM NEW MEMBER -->
+                <div class="content-page" id="pageNewMember">
+                    <div class="page-content">
+                        <h2 style="color: var(--primary-dark); margin-bottom: 25px;">
+                            <i class="fas fa-user-plus"></i> Form New Member Registration
+                        </h2>
+                        
+                        <!-- IDENTITY SECTION -->
+                        <div class="form-section">
+                            <div class="section-title">
+                                <i class="fas fa-id-card"></i> Identity Information
+                            </div>
+                            
+                            <div class="identity-grid">
+                                <!-- PANEL KIRI -->
+                                <div class="identity-panel">
+                                    <div class="form-group">
+                                        <label for="nik">NIK*</label>
+                                        <input type="text" id="nik" class="form-control" placeholder="Nomor Induk Kependudukan" maxlength="16" pattern="\d{16}" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="fullName">Nama Lengkap*</label>
+                                        <input type="text" id="fullName" class="form-control" placeholder="Nama lengkap sesuai KTP" pattern="[A-Za-z\s]+" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="gender">Jenis Kelamin*</label>
+                                        <select id="gender" class="form-control" required>
+                                            <option value="">Pilih jenis kelamin</option>
+                                            <option value="male">Laki-laki</option>
+                                            <option value="female">Perempuan</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="email">E-mail*</label>
+                                        <input type="email" id="email" class="form-control" placeholder="nama@email.com" required>
+                                    </div>
+                                </div>
+                                
+                                <!-- PANEL KANAN -->
+                                <div class="identity-panel">
+                                    <div class="form-group">
+                                        <label for="contact">Kontak (WhatsApp)*</label>
+                                        <input type="tel" id="contact" class="form-control" placeholder="0812xxxxxxxx" pattern="\d+" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="emergencyContact">Kontak Darurat*</label>
+                                        <input type="text" id="emergencyContact" class="form-control" placeholder="Nomor kontak darurat" pattern="\d+" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="joinDate">Tanggal Daftar*</label>
+                                        <input type="date" id="joinDate" class="form-control" value="" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="referralCode">Kode Referral</label>
+                                        <input type="text" id="referralCode" class="form-control" placeholder="Kode referral (opsional)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- MEMBERSHIP PLAN SECTION -->
+                        <div class="form-section">
+                            <div class="section-title">
+                                <i class="fas fa-clipboard-list"></i> Membership Plan
+                            </div>
+                            
+                            <div class="membership-grid">
+                                <!-- PANEL KIRI: Semua Plan Options -->
+                                <div class="plan-panel">
+                                    <div class="form-group">
+                                        <label for="membershipType">Membership Type*</label>
+                                        <select id="membershipType" class="form-control disabled-with-hint" required disabled
+                                            data-hint="Lengkapi Identity Information terlebih dahulu">
+                                            <option value="">Pilih tipe membership</option>
+                                            <option value="REGULAR">Regular (1 Month) - Rp 500,000</option>
+                                            <option value="GOLD">Gold (3 Months) - Rp 1,200,000</option>
+                                            <option value="PLATINUM">Platinum (12 Months) - Rp 4,000,000</option>
+                                            <option value="STUDENT">Student (1 Month) - Rp 400,000</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- PERSONAL TRAINER -->
+                                    <div class="plan-subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-dumbbell"></i> Personal Trainer
+                                        </h4>
+                                        <div class="inline-group">
+                                            <div class="form-group">
+                                                <label for="ptSelect">Personal Trainer</label>
+                                                <select id="ptSelect" class="form-control">
+                                                    <option value="">Pilih Personal Trainer</option>
+                                                    <option value="PT-001">John Doe (Weight Training)</option>
+                                                    <option value="PT-002">Jane Smith (Cardio & HIIT)</option>
+                                                    <option value="PT-003">Robert Lee (Yoga & Pilates)</option>
+                                                    <option value="PT-004">Sarah Chen (Nutrition & Wellness)</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group session-select">
+                                                <label for="ptSessions">Sessions</label>
+                                                <select id="ptSessions" class="form-control">
+                                                    <option value="0">Pilih jumlah sesi</option>
+                                                    <option value="2">2x sesi</option>
+                                                    <option value="4">4x sesi</option>
+                                                    <option value="8">8x sesi</option>
+                                                    <option value="12">12x sesi</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- CLASS -->
+                                    <div class="plan-subsection">
+                                        <h4 class="subsection-title">
+                                            <i class="fas fa-users"></i> Class
+                                        </h4>
+                                        <div class="inline-group">
+                                            <div class="form-group">
+                                                <label for="classSelect">Class Type</label>
+                                                <select id="classSelect" class="form-control">
+                                                    <option value="">Pilih Kelas</option>
+                                                    <option value="CLS-001">Yoga Basics - Rp 75,000/session</option>
+                                                    <option value="CLS-002">HIIT Burn - Rp 80,000/session</option>
+                                                    <option value="CLS-003">Zumba Dance - Rp 70,000/session</option>
+                                                    <option value="CLS-004">Boxing Fit - Rp 90,000/session</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group session-select">
+                                                <label for="classSessions">Sessions</label>
+                                                <select id="classSessions" class="form-control">
+                                                    <option value="0">Pilih jumlah sesi</option>
+                                                    <option value="2">2x sesi</option>
+                                                    <option value="4">4x sesi</option>
+                                                    <option value="8">8x sesi</option>
+                                                    <option value="12">12x sesi</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="discount">Discount</label>
+                                        <select id="discount" class="form-control disabled-with-hint" disabled
+                                            data-hint="Pilih Membership Type terlebih dahulu">
+                                            <option value="0">Tidak ada diskon</option>
+                                            <option value="5">5% (Promo Awal Tahun)</option>
+                                            <option value="10">10% (Member Baru)</option>
+                                            <option value="15">15% (Paket Family)</option>
+                                            <option value="20">20% (Promo Spesial)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <!-- PANEL KANAN: ID Member & Code -->
+                                <div class="code-panel">
+                                    <div class="form-group">
+                                        <label for="idNumber">ID Member</label>
+                                        <input type="text" id="idNumber" class="form-control-idNumber" placeholder="ID akan otomatis terisi setelah Generate" disabled>
+                                        <small class="form-text">ID akan otomatis tergenerate</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="membershipCodeDisplay">Membership Code*</label>
+                                        <input type="text" id="membershipCodeDisplay" class="code-display form-control" 
+                                            placeholder="Tekan tombol Generate" readonly>
+                                        <small class="form-text">Kode keanggotaan unik</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-secondary generate-btn disabled-with-hint" id="generateCodeBtn" disabled
+                                            data-hint="Pilih Membership Type terlebih dahulu">
+                                            <i class="fas fa-sync-alt"></i> Generate Membership Code
+                                        </button>
+                                        <small class="form-text">Generate kode dan ID otomatis</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FEE SUMMARY & PAYMENT SECTION -->
+                        <div class="form-section">
+                            <div class="section-title">
+                                <i class="fas fa-calculator"></i> Fee Summary & Payment
+                            </div>
+                            
+                            <div class="payment-grid">
+                                <!-- ENHANCED PAYMENT METHOD -->
+                                <div class="payment-method">
+                                    <div class="payment-card">
+                                        <div class="payment-header">
+                                            <div class="payment-icon">
+                                                <i class="fas fa-credit-card"></i>
+                                            </div>
+                                            <div>
+                                                <div class="payment-title">Payment Method</div>
+                                                <div class="payment-subtitle">Pilih metode pembayaran yang digunakan</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="enhanced-select-wrapper">
+                                            <select id="paymentMethod" class="enhanced-select disabled-with-hint" required disabled
+                                                data-hint="Pilih Membership Type terlebih dahulu">
+                                                <option value="">Pilih metode pembayaran...</option>
+                                                <option value="CASH" class="payment-option-cash">💵 Cash (Tunai)</option>
+                                                <option value="DEBIT" class="payment-option-debit">💳 Kartu Debit</option>
+                                                <option value="CREDIT" class="payment-option-credit">💳 Kartu Kredit</option>
+                                                <option value="TRANSFER" class="payment-option-transfer">🏦 Transfer Bank</option>
+                                                <option value="E-WALLET" class="payment-option-ewallet">📱 E-Wallet</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="payment-status" id="paymentStatus" style="display: none;">
+                                            <i class="fas fa-check-circle"></i>
+                                            <span>Metode pembayaran tersedia</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- FEE SUMMARY -->
+                                <div class="fee-summary-compact">
+                                    <div class="fee-header">
+                                        <h4><i class="fas fa-receipt"></i> RINCIAN PEMBAYARAN</h4>
+                                    </div>
+                                    <div class="fee-body">
+                                        <!-- MINIMAL STATE (Default) -->
+                                        <div class="minimal-fee-state" id="minimalFeeState">
+                                            <div class="empty-state">
+                                                <i class="fas fa-shopping-cart" style="font-size: 2rem; color: var(--primary-light); margin-bottom: 10px;"></i>
+                                                <p style="color: #888; font-style: italic;">Belum ada biaya yang dapat ditampilkan</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- DETAILED BREAKDOWN (Hidden by default) -->
+                                        <div class="fee-breakdown" id="detailedFeeBreakdown" style="display: none;">
+                                            <div class="fee-item detailed" id="membershipFeeItem">
+                                                <div class="fee-label-group">
+                                                    <span class="fee-label">Membership Type</span>
+                                                    <small class="fee-desc" id="membershipTypeDesc">-</small>
+                                                </div>
+                                                <span class="fee-value" id="membershipFee">Rp 0</span>
+                                            </div>
+                                            
+                                            <div class="fee-item detailed" id="additionalFeeItem" style="display: none;">
+                                                <div class="fee-label-group">
+                                                    <span class="fee-label">Additional Fee</span>
+                                                    <small class="fee-desc" id="additionalFeeDesc">Biaya pendaftaran</small>
+                                                </div>
+                                                <span class="fee-value" id="additionalFee">Rp 0</span>
+                                            </div>
+
+                                            <div class="fee-item detailed" id="ptFeeItem">
+                                                <div class="fee-label-group">
+                                                    <span class="fee-label">Personal Trainer</span>
+                                                    <small class="fee-desc" id="ptSessionDesc">0 sesi</small>
+                                                </div>
+                                                <span class="fee-value" id="ptFee">Rp 0</span>
+                                            </div>
+                                            
+                                            <div class="fee-item detailed" id="classFeeItem">
+                                                <div class="fee-label-group">
+                                                    <span class="fee-label">Class Sessions</span>
+                                                    <small class="fee-desc" id="classSessionDesc">0 sesi</small>
+                                                </div>
+                                                <span class="fee-value" id="classFee">Rp 0</span>
+                                            </div>
+                                            
+                                            <div class="fee-divider light"></div>
+                                            
+                                            <div class="fee-item" id="subtotalItem">
+                                                <span class="fee-label">Subtotal</span>
+                                                <span class="fee-value subtotal" id="subtotalFee">Rp 0</span>
+                                            </div>
+                                            
+                                            <div class="fee-item discount-item" id="discountItem">
+                                                <div class="fee-label-group">
+                                                    <span class="fee-label">Discount</span>
+                                                    <small class="fee-desc" id="discountPercentage">0%</small>
+                                                </div>
+                                                <span class="fee-value discount" id="totalDiscount">- Rp 0</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="fee-divider bold"></div>
+                                        
+                                        <!-- GRAND TOTAL (Always visible) -->
+                                        <div class="fee-total">
+                                            <div class="total-item">
+                                                <div class="total-label-group">
+                                                    <span class="total-label">TOTAL PEMBAYARAN</span>
+                                                </div>
+                                                <div class="total-value-container">
+                                                    <span class="total-value" id="totalFee">Rp 0</span>
+                                                    <small class="total-note">Termasuk pajak & administrasi</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CONFIRMATION & SUBMIT -->
+                        <div class="form-check">
+                            <input type="checkbox" id="confirmData" required>
+                            <label for="confirmData">Saya telah memeriksa semua data yang diisi dan menyatakan data sudah benar.</label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-clear" id="clearFormBtn">
+                                <i class="fas fa-eraser"></i> Clear All
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="submitFormBtn">
+                                <i class="fas fa-paper-plane"></i> Submit Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PAGE: FORM RENEWALS (Placeholder) -->
+                <div class="content-page" id="pageRenewals">
+                    <div class="page-content">
+                        <h2 style="color: var(--primary-dark); margin-bottom: 25px;">
+                            <i class="fas fa-sync-alt"></i> Form Renewals
+                        </h2>
+                        <p>Form untuk perpanjangan keanggotaan akan segera tersedia.</p>
+                    </div>
+                </div>
+                
+                <!-- PAGE: ADD PT/CLASS (Placeholder) -->
+                <div class="content-page" id="pagePtClass">
+                    <div class="page-content">
+                        <h2 style="color: var(--primary-dark); margin-bottom: 25px;">
+                            <i class="fas fa-running"></i> Add PT / Class
+                        </h2>
+                        <p>Form untuk booking Personal Trainer atau Kelas akan segera tersedia.</p>
+                    </div>
+                </div>
+                
+                <!-- PAGE: VISIT CHECK-IN (Placeholder) -->
+                <div class="content-page" id="pageCheckIn">
+                    <div class="page-content">
+                        <h2 style="color: var(--primary-dark); margin-bottom: 25px;">
+                            <i class="fas fa-qrcode"></i> Visit (Check-in)
+                        </h2>
+                        <p>Form untuk check-in member akan segera tersedia.</p>
+                    </div>
+                </div>
+                
+                <!-- PAGE: REMINDER (Placeholder) -->
+                <div class="content-page" id="pageReminder">
+                    <div class="page-content">
+                        <h2 style="color: var(--primary-dark); margin-bottom: 25px;">
+                            <i class="fas fa-bell"></i> Reminder System
+                        </h2>
+                        <p>Sistem reminder untuk jatuh tempo dan follow-up akan segera tersedia.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbz5crHjJVPGYDie3EsMMYKq2W10bU_3CBMKdEUcEAh4VX6VhkXnZW2Urolwfj3Ea-QI/exec";
+        // ====================
+        // UTILITY FUNCTIONS
+        // ====================
+        
+        let currentPage = 'home';
+        let isNewMemberFormDirty = false;
+
+        function showConfirmModal(message, onOk, onCancel, okText = "OK", cancelText = "Tidak") {
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100vw';
+            modal.style.height = '100vh';
+            modal.style.background = 'rgba(0,0,0,0.5)';
+            modal.style.zIndex = '2000';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            modal.style.backdropFilter = 'blur(3px)';
+
+            const box = document.createElement('div');
+            box.style.background = '#fff';
+            box.style.padding = '30px 35px';
+            box.style.borderRadius = '15px';
+            box.style.boxShadow = '0 10px 40px rgba(0,0,0,0.2)';
+            box.style.textAlign = 'center';
+            box.style.maxWidth = '450px';
+            box.style.width = '90%';
+            box.innerHTML = `
+                <div style="margin-bottom: 25px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f0ad4e; margin-bottom: 15px;"></i>
+                    <div style="font-size: 1.1rem; color: #321f05; line-height: 1.5;">
+                        ${message}
+                    </div>
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button id="confirmCancel" style="padding: 12px 28px; border-radius: 8px; background: #6c757d; color: #fff; border: none; font-weight: 600; cursor: pointer; flex: 1; transition: all 0.3s;">
+                        ${cancelText}
+                    </button>
+                    <button id="confirmOk" style="padding: 12px 28px; border-radius: 8px; background: var(--primary-medium); color: #fff; border: none; font-weight: 600; cursor: pointer; flex: 1; transition: all 0.3s;">
+                        ${okText}
+                    </button>
+                </div>
+            `;
+            modal.appendChild(box);
+            document.body.appendChild(modal);
+
+            // Button hover effects
+            const okBtn = document.getElementById('confirmOk');
+            const cancelBtn = document.getElementById('confirmCancel');
+            
+            okBtn.onmouseenter = () => okBtn.style.background = 'var(--primary-dark)';
+            okBtn.onmouseleave = () => okBtn.style.background = 'var(--primary-medium)';
+            
+            cancelBtn.onmouseenter = () => cancelBtn.style.background = '#5a6268';
+            cancelBtn.onmouseleave = () => cancelBtn.style.background = '#6c757d';
+
+            // Event handlers
+            okBtn.onclick = function() {
+                document.body.removeChild(modal);
+                if (onOk) onOk();
+            };
+            
+            cancelBtn.onclick = function() {
+                document.body.removeChild(modal);
+                if (onCancel) onCancel();
+            };
+            
+            // Close on background click
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                    if (onCancel) onCancel();
+                }
+            };
+        }
+
+        function resetPageScroll(pageId) {
+            // Reset dashboard main container
+            const dashboardMain = document.getElementById('dashboardMain');
+            if (dashboardMain) {
+                dashboardMain.scrollTop = 0;
+            }
+            
+            // Reset page content if exists
+            const pageElement = document.getElementById(`page${pageId.charAt(0).toUpperCase() + pageId.slice(1)}`);
+            if (pageElement) {
+                const pageContent = pageElement.querySelector('.page-content');
+                if (pageContent) {
+                    // Gunakan timeout untuk memastikan DOM sudah dirender
+                    setTimeout(() => {
+                        pageContent.scrollTop = 0;
+                    }, 100);
+                }
+            }
+        }
+
+        // Keep backward compatibility
+        function showConfirmClearForm(onOk, onCancel) {
+            showConfirmModal(
+                'Semua data form akan otomatis terhapus.<br>Apakah Anda yakin ingin pindah halaman?',
+                onOk, 
+                onCancel
+            );
+        }
+
+        /**
+         * Menampilkan pesan toast
+         */
+        function showMessage(message, type = 'info') {
+            const existingMessage = document.querySelector('.message-toast');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            const messageEl = document.createElement('div');
+            messageEl.className = `message-toast message-${type}`;
+            messageEl.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}" style="margin-right: 10px;"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(messageEl);
+            
+            setTimeout(() => {
+                if (messageEl.parentNode) {
+                    messageEl.style.opacity = '0';
+                    setTimeout(() => {
+                        if (messageEl.parentNode) {
+                            messageEl.remove();
+                        }
+                    }, 500);
+                }
+            }, 3000);
+        }
+        
+        /**
+         * Format currency (Rupiah)
+         */
+        function formatCurrency(amount) {
+            return 'Rp ' + amount.toLocaleString('id-ID');
+        }
+        
+        function checkIdentityComplete() {
+            const requiredFields = [
+                { id: 'nik', test: (val) => /^\d{16}$/.test(val.trim()) },
+                { id: 'fullName', test: (val) => /^[A-Za-z\s]+$/.test(val.trim()) && val.trim().length > 0 },
+                { id: 'gender', test: (val) => val === 'male' || val === 'female' },
+                { id: 'email', test: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim()) },
+                { id: 'contact', test: (val) => /^\d+$/.test(val.trim()) && val.trim().length >= 10 },
+                { id: 'emergencyContact', test: (val) => /^\d+$/.test(val.trim()) && val.trim().length >= 10 },
+                { id: 'joinDate', test: (val) => val !== '' }
+            ];
+            
+            for (const field of requiredFields) {
+                const element = document.getElementById(field.id);
+                if (!element || !field.test(element.value)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        /**
+         * Update field states based on validation progress
+         */
+        function updateFieldStates() {
+            const identityComplete = checkIdentityComplete();
+            const membershipTypeSelected = document.getElementById('membershipType').value !== '';
+            
+            // Update Membership Type
+            const membershipType = document.getElementById('membershipType');
+            membershipType.disabled = !identityComplete;
+            membershipType.classList.toggle('disabled-with-hint', !identityComplete);
+            
+            if (identityComplete) {
+                membershipType.removeAttribute('data-hint');
+                membershipType.classList.remove('disabled-with-hint');
+            } else {
+                membershipType.setAttribute('data-hint', 'Lengkapi Identity Information terlebih dahulu');
+                membershipType.classList.add('disabled-with-hint');
+            }
+            
+            // Update dependent fields (Discount, Payment, PT, Class, Generate)
+            const dependentFields = [
+                'discount',
+                'paymentMethod',
+                'ptSelect',
+                'classSelect',
+                'generateCodeBtn'
+            ];
+            
+            dependentFields.forEach(fieldId => {
+                const element = document.getElementById(fieldId);
+                if (element) {
+                    if (fieldId === 'generateCodeBtn') {
+                        element.disabled = !membershipTypeSelected;
+                        element.classList.toggle('disabled-with-hint', !membershipTypeSelected);
+                        if (membershipTypeSelected) {
+                            element.removeAttribute('data-hint');
+                        } else {
+                            element.setAttribute('data-hint', 'Pilih Membership Type terlebih dahulu');
+                        }
+                    } else {
+                        element.disabled = !membershipTypeSelected;
+                        element.classList.toggle('disabled-with-hint', !membershipTypeSelected);
+                        if (membershipTypeSelected) {
+                            element.removeAttribute('data-hint');
+                        } else {
+                            element.setAttribute('data-hint', 'Pilih Membership Type terlebih dahulu');
+                        }
+                    }
+                }
+            });
+            
+            // Show/hide payment options based on membership type selection
+            updatePaymentMethodStatus();
+            
+            // Update PT/Class session availability (existing function)
+            updateSessionAvailability();
+            
+            // Highlight required fields if identity incomplete
+            highlightRequiredFields(!identityComplete);
+        }
+
+        /**
+         * Highlight required fields
+         */
+        function highlightRequiredFields(shouldHighlight) {
+            const requiredFields = ['nik', 'fullName', 'gender', 'email', 'contact', 'emergencyContact', 'joinDate'];
+            
+            requiredFields.forEach(fieldId => {
+                const element = document.getElementById(fieldId);
+                if (element) {
+                    if (shouldHighlight && !element.value.trim()) {
+                        element.classList.add('required-field-highlight');
+                    } else {
+                        element.classList.remove('required-field-highlight');
+                    }
+                }
+            });
+        }
+
+        /**
+         * Initialize payment options selection
+         */
+        function updatePaymentMethodStatus() {
+            const paymentMethod = document.getElementById('paymentMethod');
+            const paymentStatus = document.getElementById('paymentStatus');
+            const membershipTypeSelected = document.getElementById('membershipType').value !== '';
+            
+            if (paymentMethod && paymentStatus) {
+                if (membershipTypeSelected) {
+                    paymentStatus.style.display = 'flex';
+                    
+                    // Update status text based on selection
+                    if (paymentMethod.value) {
+                        paymentStatus.innerHTML = `
+                            <i class="fas fa-check-circle"></i>
+                            <span>Metode pembayaran: <strong>${paymentMethod.options[paymentMethod.selectedIndex].text}</strong></span>
+                        `;
+                    } else {
+                        paymentStatus.innerHTML = `
+                            <i class="fas fa-info-circle"></i>
+                            <span>Pilih metode pembayaran di atas</span>
+                        `;
+                    }
+                } else {
+                    paymentStatus.style.display = 'none';
+                }
+            }
+        }
+
+        function updateSessionAvailability() {
+            const membershipType = document.getElementById('membershipType');
+            const ptSelect = document.getElementById('ptSelect');
+            const ptSessions = document.getElementById('ptSessions');
+            const classSelect = document.getElementById('classSelect');
+            const classSessions = document.getElementById('classSessions');
+            
+            // Check if membership type is selected AND enabled
+            const isMembershipSelected = membershipType.value !== '' && !membershipType.disabled;
+            
+            // PT Section
+            if (isMembershipSelected) {
+                ptSelect.disabled = false;
+                ptSelect.classList.remove('disabled-with-hint');
+                
+                if (ptSelect.value === '') {
+                    ptSessions.disabled = true;
+                    ptSessions.classList.add('disabled-with-hint');
+                    ptSessions.setAttribute('data-hint', 'Pilih Personal Trainer terlebih dahulu');
+                    document.getElementById('ptFeeItem').style.display = 'none';
+                } else {
+                    ptSessions.disabled = false;
+                    ptSessions.classList.remove('disabled-with-hint');
+                    ptSessions.removeAttribute('data-hint');
+                    document.getElementById('ptFeeItem').style.display = 'flex';
+                }
+            } else {
+                ptSelect.disabled = true;
+                ptSelect.classList.add('disabled-with-hint');
+                ptSelect.setAttribute('data-hint', 'Pilih Membership Type terlebih dahulu');
+                
+                ptSessions.disabled = true;
+                ptSessions.classList.add('disabled-with-hint');
+                ptSessions.setAttribute('data-hint', 'Pilih Membership Type terlebih dahulu');
+                document.getElementById('ptFeeItem').style.display = 'none';
+            }
+            
+            // Class Section
+            if (isMembershipSelected) {
+                classSelect.disabled = false;
+                classSelect.classList.remove('disabled-with-hint');
+                
+                if (classSelect.value === '') {
+                    classSessions.disabled = true;
+                    classSessions.classList.add('disabled-with-hint');
+                    classSessions.setAttribute('data-hint', 'Pilih Class terlebih dahulu');
+                    document.getElementById('classFeeItem').style.display = 'none';
+                } else {
+                    classSessions.disabled = false;
+                    classSessions.classList.remove('disabled-with-hint');
+                    classSessions.removeAttribute('data-hint');
+                    document.getElementById('classFeeItem').style.display = 'flex';
+                }
+            } else {
+                classSelect.disabled = true;
+                classSelect.classList.add('disabled-with-hint');
+                classSelect.setAttribute('data-hint', 'Pilih Membership Type terlebih dahulu');
+                
+                classSessions.disabled = true;
+                classSessions.classList.add('disabled-with-hint');
+                classSessions.setAttribute('data-hint', 'Pilih Membership Type terlebih dahulu');
+                document.getElementById('classFeeItem').style.display = 'none';
+            }
+            
+            calculateFees();
+        }
+
+        /* Calculate fees based on selections*/
+        function calculateFees() {
+            // Membership fee mapping
+            const membershipPrices = {
+                'REGULAR': 500000,
+                'GOLD': 1200000,
+                'PLATINUM': 4000000,
+                'STUDENT': 400000
+            };
+            
+            const membershipLabels = {
+                'REGULAR': 'Regular (1 Month)',
+                'GOLD': 'Gold (3 Months)',
+                'PLATINUM': 'Platinum (12 Months)',
+                'STUDENT': 'Student (1 Month)'
+            };
+            
+            // Class fee mapping
+            const classPrices = {
+                'CLS-001': 75000,
+                'CLS-002': 80000,
+                'CLS-003': 70000,
+                'CLS-004': 90000
+            };
+            
+            const classLabels = {
+                'CLS-001': 'Yoga Basics',
+                'CLS-002': 'HIIT Burn',
+                'CLS-003': 'Zumba Dance',
+                'CLS-004': 'Boxing Fit'
+            };
+            
+            // PT fee per session
+            const ptFeePerSession = 100000;
+            
+            // ADDITIONAL FEE CONSTANT (NEW MEMBER REGISTRATION FEE)
+            const ADDITIONAL_FEE = 40000; // Rp 40,000 untuk biaya pendaftaran member baru
+            
+            // Get current values from form
+            const membershipType = document.getElementById('membershipType').value;
+            const discountSelect = document.getElementById('discount');
+            const discount = discountSelect ? parseInt(discountSelect.value) || 0 : 0;
+            const ptSelect = document.getElementById('ptSelect').value;
+            const ptSessions = parseInt(document.getElementById('ptSessions').value) || 0;
+            const classType = document.getElementById('classSelect').value;
+            const classSessions = parseInt(document.getElementById('classSessions').value) || 0;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            
+            // Check if membership type is selected
+            const isMembershipSelected = membershipType !== '';
+            
+            // Get DOM elements for minimal/detailed display
+            const minimalState = document.getElementById('minimalFeeState');
+            const detailedBreakdown = document.getElementById('detailedFeeBreakdown');
+            
+            // ===== TOGGLE BETWEEN MINIMAL AND DETAILED DISPLAY =====
+            if (!isMembershipSelected) {
+                // ===== MINIMAL DISPLAY STATE =====
+                // Show minimal state, hide detailed breakdown
+                if (minimalState) minimalState.style.display = 'block';
+                if (detailedBreakdown) detailedBreakdown.style.display = 'none';
+                
+                // Update only TOTAL with zero value
+                const totalFeeElement = document.getElementById('totalFee');
+                if (totalFeeElement) {
+                    totalFeeElement.textContent = formatCurrency(0);
+                }
+                
+                // Update payment method description
+                const paymentMethodDesc = document.getElementById('paymentMethodDesc');
+                if (paymentMethodDesc) {
+                    paymentMethodDesc.textContent = 'Pilih membership type terlebih dahulu';
+                }
+                
+            } else {
+                // ===== DETAILED DISPLAY STATE =====
+                // Hide minimal state, show detailed breakdown
+                if (minimalState) minimalState.style.display = 'none';
+                if (detailedBreakdown) detailedBreakdown.style.display = 'block';
+                
+                // Calculate individual fees
+                const membershipFee = membershipPrices[membershipType] || 0;
+                const ptFee = ptSessions * ptFeePerSession;
+                const classFee = classSessions * (classPrices[classType] || 0);
+                const additionalFee = membershipType ? ADDITIONAL_FEE : 0; // ADDITIONAL FEE hanya jika membership dipilih
+                
+                // Calculate total before discount
+                const subtotal = membershipFee + ptFee + classFee + additionalFee;
+                const discountAmount = (subtotal * discount) / 100;
+                const total = subtotal - discountAmount;
+                
+                // ===== UPDATE DETAILED DISPLAY ELEMENTS =====
+                
+                // 1. Membership Fee Display
+                const membershipFeeElement = document.getElementById('membershipFee');
+                const membershipTypeDesc = document.getElementById('membershipTypeDesc');
+                if (membershipFeeElement) {
+                    membershipFeeElement.textContent = formatCurrency(membershipFee);
+                }
+                if (membershipTypeDesc) {
+                    membershipTypeDesc.textContent = membershipLabels[membershipType] || '-';
+                }
+                
+                // 1A. ADDITIONAL FEE DISPLAY (NEW)
+                const additionalFeeItem = document.getElementById('additionalFeeItem');
+                if (additionalFeeItem) {
+                    if (membershipType && additionalFee > 0) {
+                        document.getElementById('additionalFee').textContent = formatCurrency(additionalFee);
+                        document.getElementById('additionalFeeDesc').textContent = 'Biaya pendaftaran member baru';
+                        additionalFeeItem.style.display = 'flex';
+                    } else {
+                        additionalFeeItem.style.display = 'none';
+                    }
+                }
+                
+                // 2. PT Details (only show if selected)
+                const ptFeeItem = document.getElementById('ptFeeItem');
+                if (ptFeeItem) {
+                    if (ptSelect && ptSessions > 0) {
+                        // Get PT name from selected option
+                        const ptSelectElement = document.getElementById('ptSelect');
+                        const selectedOption = ptSelectElement.options[ptSelectElement.selectedIndex];
+                        const ptName = selectedOption ? selectedOption.text.split(' (')[0] : 'Personal Trainer';
+                        
+                        // Update PT fee display
+                        document.getElementById('ptFee').textContent = formatCurrency(ptFee);
+                        document.getElementById('ptSessionDesc').textContent = `${ptSessions} sesi - ${ptName}`;
+                        ptFeeItem.style.display = 'flex';
+                    } else {
+                        ptFeeItem.style.display = 'none';
+                    }
+                }
+                
+                // 3. Class Details (only show if selected)
+                const classFeeItem = document.getElementById('classFeeItem');
+                if (classFeeItem) {
+                    if (classType && classSessions > 0) {
+                        // Update Class fee display
+                        document.getElementById('classFee').textContent = formatCurrency(classFee);
+                        document.getElementById('classSessionDesc').textContent = 
+                            `${classSessions} sesi - ${classLabels[classType] || 'Class'}`;
+                        classFeeItem.style.display = 'flex';
+                    } else {
+                        classFeeItem.style.display = 'none';
+                    }
+                }
+                
+                // 4. Discount Details (only show if discount > 0)
+                const discountItem = document.getElementById('discountItem');
+                if (discountItem) {
+                    if (discount > 0) {
+                        document.getElementById('totalDiscount').textContent = formatCurrency(discountAmount);
+                        document.getElementById('discountPercentage').textContent = `${discount}% discount`;
+                        discountItem.style.display = 'flex';
+                    } else {
+                        discountItem.style.display = 'none';
+                    }
+                }
+                
+                // 5. Update subtotal and total
+                const subtotalFeeElement = document.getElementById('subtotalFee');
+                const totalFeeElement = document.getElementById('totalFee');
+                if (subtotalFeeElement) {
+                    subtotalFeeElement.textContent = formatCurrency(subtotal);
+                }
+                if (totalFeeElement) {
+                    totalFeeElement.textContent = formatCurrency(total);
+                }
+                
+                // 6. Update payment method description
+                const paymentMethodDesc = document.getElementById('paymentMethodDesc');
+                if (paymentMethodDesc) {
+                    const paymentMethods = {
+                        'CASH': 'Cash (Tunai)',
+                        'DEBIT': 'Kartu Debit',
+                        'CREDIT': 'Kartu Kredit',
+                        'TRANSFER': 'Transfer Bank',
+                        'E-WALLET': 'E-Wallet'
+                    };
+                    
+                    if (paymentMethod) {
+                        paymentMethodDesc.textContent = `Metode: ${paymentMethods[paymentMethod] || paymentMethod}`;
+                    } else {
+                        paymentMethodDesc.textContent = 'Pilih metode pembayaran';
+                    }
+                }
+            }
+        }
+        
+        function scrollToElement(elementId, offset = 100) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                // Find the closest form-section or page-content
+                const container = element.closest('.form-section') || element.closest('.page-content');
+                
+                if (container) {
+                    const containerRect = container.getBoundingClientRect();
+                    const bodyRect = document.body.getBoundingClientRect();
+                    const scrollPosition = containerRect.top - bodyRect.top - offset;
+                    
+                    window.scrollTo({
+                        top: scrollPosition,
+                        behavior: 'smooth'
+                    });
+                }
+                
+                // Focus on the element
+                setTimeout(() => {
+                    element.focus();
+                    if (element.tagName === 'SELECT') {
+                        element.style.borderColor = '#dc3545';
+                        element.style.boxShadow = '0 0 0 3px rgba(220, 53, 69, 0.1)';
+                        
+                        // Reset after 2 seconds
+                        setTimeout(() => {
+                            element.style.borderColor = '';
+                            element.style.boxShadow = '';
+                        }, 2000);
+                    }
+                }, 500);
+            }
+        }
+
+        /* Generic form reset function*/
+        function resetForm(formId, options = {}) {
+            const form = document.getElementById(formId);
+            if (!form) return;
+            
+            const defaultOptions = {
+                preserveDate: false,
+                preserveGeneratedCode: false, // NEW: Control code preservation
+                clearValidation: true,
+                resetToDefault: true,
+                ...options
+            };
+            
+            // Special handling for code display
+            const membershipCodeDisplay = document.getElementById('membershipCodeDisplay');
+            const idNumberField = document.getElementById('idNumber');
+            
+            // Preserve generated code if specified
+            if (defaultOptions.preserveGeneratedCode) {
+                // Keep current values
+                const currentCode = membershipCodeDisplay.value;
+                const currentId = idNumberField.value;
+                
+                form.querySelectorAll('input, select, textarea').forEach(element => {
+                    if (element !== membershipCodeDisplay && element !== idNumberField) {
+                        resetElement(element, defaultOptions);
+                    }
+                });
+                
+                // Restore preserved values
+                membershipCodeDisplay.value = currentCode;
+                idNumberField.value = currentId;
+                
+            } else {
+                // Normal reset (clear everything)
+                form.querySelectorAll('input, select, textarea').forEach(element => {
+                    resetElement(element, defaultOptions);
+                });
+                
+                // Specifically clear code display
+                membershipCodeDisplay.value = '';
+                membershipCodeDisplay.placeholder = 'Tekan tombol Generate';
+                idNumberField.value = '';
+                idNumberField.placeholder = 'ID akan otomatis terisi setelah Generate';
+            }
+            
+            // Reset specific dropdowns
+            const resetSelects = ['gender', 'membershipType', 'ptSelect', 'classSelect', 'paymentMethod'];
+            resetSelects.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) select.selectedIndex = 0;
+            });
+            
+            // Reset session selects
+            document.getElementById('ptSessions').value = '0';
+            document.getElementById('classSessions').value = '0';
+            document.getElementById('discount').value = '0';
+            document.getElementById('confirmData').checked = false;
+            
+            // Update session availability
+            updateSessionAvailability();
+            
+            // Calculate fees
+            calculateFees();
+            
+            // Reset dirty flag
+            if (formId === 'pageNewMember') {
+                isNewMemberFormDirty = false;
+            }
+            
+            // Scroll to top of form
+            setTimeout(() => {
+                const pageContent = form.querySelector('.page-content');
+                if (pageContent) {
+                    pageContent.scrollTop = 0;
+                }
+            }, 100);
+        }
+
+        // Helper function to reset individual element
+        function resetElement(element, options) {
+            if (element.type !== 'button' && !element.classList.contains('code-display')) {
+                if (element.type === 'checkbox') {
+                    element.checked = false;
+                } else if (element.type === 'date' && options.preserveDate) {
+                    // Keep today's date
+                    const today = new Date().toISOString().split('T')[0];
+                    element.value = today;
+                } else if (element.type === 'date') {
+                    element.value = '';
+                } else {
+                    element.value = element.tagName === 'SELECT' ? '' : '';
+                }
+                
+                // Reset validation states
+                if (options.clearValidation) {
+                    element.classList.remove('is-invalid', 'is-valid');
+                    element.style.borderColor = '';
+                    element.style.boxShadow = '';
+                }
+            }
+        }
+
+        function validateNewMemberForm() {
+            const validationRules = [
+                {
+                    id: 'nik',
+                    test: () => {
+                        const value = document.getElementById('nik').value.trim();
+                        return /^\d{16}$/.test(value);
+                    },
+                    message: 'NIK harus 16 digit angka!',
+                    scrollTo: 'nik'
+                },
+                {
+                    id: 'fullName',
+                    test: () => {
+                        const value = document.getElementById('fullName').value.trim();
+                        return /^[A-Za-z\s]+$/.test(value) && value.length > 0;
+                    },
+                    message: 'Nama lengkap harus diisi (hanya huruf dan spasi)!',
+                    scrollTo: 'fullName'
+                },
+                {
+                    id: 'gender',
+                    test: () => {
+                        const value = document.getElementById('gender').value;
+                        return value === 'male' || value === 'female';
+                    },
+                    message: 'Pilih jenis kelamin!',
+                    scrollTo: 'gender'
+                },
+                {
+                    id: 'email',
+                    test: () => {
+                        const value = document.getElementById('email').value.trim();
+                        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                    },
+                    message: 'Format email tidak valid!',
+                    scrollTo: 'email'
+                },
+                {
+                    id: 'contact',
+                    test: () => {
+                        const value = document.getElementById('contact').value.trim();
+                        return /^\d+$/.test(value) && value.length >= 10;
+                    },
+                    message: 'Kontak WhatsApp harus diisi (minimal 10 digit angka)!',
+                    scrollTo: 'contact'
+                },
+                {
+                    id: 'emergencyContact',
+                    test: () => {
+                        const value = document.getElementById('emergencyContact').value.trim();
+                        return /^\d+$/.test(value) && value.length >= 10;
+                    },
+                    message: 'Kontak darurat harus diisi (minimal 10 digit angka)!',
+                    scrollTo: 'emergencyContact'
+                },
+                {
+                    id: 'joinDate',
+                    test: () => {
+                        const value = document.getElementById('joinDate').value;
+                        return value !== '';
+                    },
+                    message: 'Tanggal daftar wajib diisi!',
+                    scrollTo: 'joinDate'
+                },
+                {
+                    id: 'membershipCodeDisplay',
+                    test: () => {
+                        const value = document.getElementById('membershipCodeDisplay').value.trim();
+                        return value !== '' && value !== 'Tekan tombol Generate';
+                    },
+                    message: 'Klik tombol Generate Membership Code terlebih dahulu!',
+                    scrollTo: 'generateCodeBtn'
+                },
+                {
+                    id: 'membershipType',
+                    test: () => {
+                        const value = document.getElementById('membershipType').value;
+                        return value !== '';
+                    },
+                    message: 'Pilih tipe membership!',
+                    scrollTo: 'membershipType'
+                },
+                {
+                    id: 'ptSessions',
+                    test: () => {
+                        const ptSelect = document.getElementById('ptSelect').value;
+                        const ptSessions = document.getElementById('ptSessions').value;
+                        if (ptSelect && ptSelect !== '') {
+                            return parseInt(ptSessions) > 0;
+                        }
+                        return true; // Skip if PT not selected
+                    },
+                    message: 'Isi jumlah sesi Personal Trainer!',
+                    scrollTo: 'ptSessions'
+                },
+                {
+                    id: 'classSessions',
+                    test: () => {
+                        const classSelect = document.getElementById('classSelect').value;
+                        const classSessions = document.getElementById('classSessions').value;
+                        if (classSelect && classSelect !== '') {
+                            return parseInt(classSessions) > 0;
+                        }
+                        return true; // Skip if Class not selected
+                    },
+                    message: 'Isi jumlah sesi Class!',
+                    scrollTo: 'classSessions'
+                },
+                {
+                    id: 'paymentMethod',
+                    test: () => {
+                        const value = document.getElementById('paymentMethod').value;
+                        return value !== '';
+                    },
+                    message: 'Pilih metode pembayaran!',
+                    scrollTo: 'paymentMethod'
+                },
+                {
+                    id: 'confirmData',
+                    test: () => {
+                        return document.getElementById('confirmData').checked;
+                    },
+                    message: 'Harap centang konfirmasi data sebelum submit!',
+                    scrollTo: 'confirmData'
+                }
+            ];
+            
+            // Check each validation rule
+            for (const rule of validationRules) {
+                if (!rule.test()) {
+                    showMessage(rule.message, 'error');
+                    scrollToElement(rule.scrollTo);
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        /**
+         * Generate membership code
+         */
+        function generateMembershipCode() {
+            const membershipType = document.getElementById('membershipType').value;
+            const generateBtn = document.getElementById('generateCodeBtn');
+            const codeDisplay = document.getElementById('membershipCodeDisplay');
+            
+            // Validate membership type is selected
+            if (!membershipType) {
+                showMessage('Pilih Membership Type terlebih dahulu!', 'error');
+                scrollToElement('membershipType');
+                return;
+            }
+            
+            const originalHTML = generateBtn.innerHTML;
+            
+            // Tampilkan spinner pada tombol
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            generateBtn.disabled = true;
+            
+            // Call Google Apps Script function
+            google.script.run
+                .withSuccessHandler(function(code) {
+                    // Update tampilan dengan kode yang di-generate
+                    codeDisplay.value = code;
+                    codeDisplay.placeholder = code;
+                    
+                    const idNumberField = document.getElementById('idNumber');
+                    if (idNumberField) {
+                        // Generate ID format: ID-XXXXX-YY
+                        const idCode = code.replace('BMG-', 'ID-');
+                        const yearSuffix = new Date().getFullYear().toString().substr(-2);
+                        idNumberField.value = `${idCode}-${yearSuffix}`;
+                    }
+                    
+                    isNewMemberFormDirty = true;
+                    
+                    // Reset tombol dengan konten asli
+                    generateBtn.innerHTML = originalHTML;
+                    generateBtn.disabled = false;
+                    
+                    showMessage('Membership code berhasil di-generate: ' + code, 'success');
+                })
+                .withFailureHandler(function(error) {
+                    console.error('Error generating code:', error);
+                    // Fallback client-side generation
+                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                    let randomCode = '';
+                    for (let i = 0; i < 6; i++) {
+                        randomCode += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    const code = 'BMG-' + randomCode;
+                    
+                    codeDisplay.value = code;
+                    codeDisplay.placeholder = code;
+                    
+                    const idNumberField = document.getElementById('idNumber');
+                    if (idNumberField) {
+                        const idCode = code.replace('BMG-', 'ID-');
+                        const yearSuffix = new Date().getFullYear().toString().substr(-2);
+                        idNumberField.value = `${idCode}-${yearSuffix}`;
+                    }
+
+                    isNewMemberFormDirty = true;
+                    
+                    generateBtn.innerHTML = originalHTML;
+                    generateBtn.disabled = false;
+                    
+                    showMessage('Membership code generated locally: ' + code, 'info');
+                })
+                .generateMembershipCode();
+        }
+
+        /**
+         * Switch to a specific page
+         */
+        function switchPage(pageId) {
+            // Tambahan proteksi: jika dari halaman newMember dan form dirty, konfirmasi dulu
+            const membershipCode = document.getElementById('membershipCodeDisplay').value.trim();
+            const isCodeGenerated = membershipCode !== '' && membershipCode !== 'Tekan tombol Generate';
+            
+            if (currentPage === 'newMember' && (isNewMemberFormDirty || isCodeGenerated)) {
+                showConfirmClearForm(() => {
+                    // Reset form TANPA menghapus generated code
+                    resetForm('pageNewMember', {
+                        preserveDate: true,
+                        preserveGeneratedCode: true, // PRESERVE THE CODE!
+                        resetToDefault: false
+                    });
+                    
+                    isNewMemberFormDirty = false;
+                    
+                    // Lanjutkan navigasi setelah modal ditutup
+                    setTimeout(() => {
+                        performPageSwitch(pageId);
+                    }, 10);
+                }, () => {
+                    // User memilih "Tidak", batalkan navigasi
+                    return;
+                });
+                return;
+            }
+            
+            performPageSwitch(pageId);
+        }
+
+        function performPageSwitch(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.content-page').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // Show selected page
+            const targetPage = document.getElementById(`page${pageId.charAt(0).toUpperCase() + pageId.slice(1)}`);
+            if (targetPage) {
+                targetPage.style.display = 'block';
+                targetPage.classList.add('fade-in');
+                resetPageScroll(pageId);
+                
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.page === pageId) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Update page title
+                const pageTitles = {
+                    'home': 'Dashboard Home',
+                    'newMember': 'Form New Member',
+                    'renewals': 'Form Renewals',
+                    'ptClass': 'Add PT / Class',
+                    'checkIn': 'Visit (Check-in)',
+                    'reminder': 'Reminder System'
+                };
+                
+                document.getElementById('pageTitle').textContent = pageTitles[pageId] || pageId;
+                
+                // Show/hide back button
+                const backButton = document.getElementById('backToMenu');
+                if (pageId === 'home') {
+                    backButton.style.display = 'none';
+                } else {
+                    backButton.style.display = 'flex';
+                }
+                
+                currentPage = pageId;
+            }
+        }
+        
+        /**
+         * Switch between login and dashboard
+         */
+        function switchToDashboard() {
+            const loginWrapper = document.getElementById('loginWrapper');
+            const dashboardPage = document.getElementById('dashboardPage');
+            
+            loginWrapper.style.opacity = '0';
+            loginWrapper.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                loginWrapper.style.display = 'none';
+                dashboardPage.style.display = 'block';
+                switchPage('home');
+                
+                // Remove body centering for dashboard
+                document.body.style.justifyContent = 'normal';
+                document.body.style.alignItems = 'normal';
+                document.body.style.padding = '0';
+                document.body.style.backgroundImage = 'none';
+            }, 500);
+        }
+        
+        function switchToLogin() {
+            const loginWrapper = document.getElementById('loginWrapper');
+            const dashboardPage = document.getElementById('dashboardPage');
+            
+            dashboardPage.style.display = 'none';
+            loginWrapper.style.display = 'block';
+            
+            setTimeout(() => {
+                loginWrapper.style.opacity = '1';
+            }, 50);
+            
+            // Restore body centering for login
+            document.body.style.justifyContent = 'center';
+            document.body.style.alignItems = 'center';
+            document.body.style.padding = '20px';
+            document.body.style.backgroundImage = 'radial-gradient(circle at 10% 20%, rgba(221, 211, 196, 0.1) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(132, 97, 65, 0.1) 0%, transparent 20%)';
+            
+            document.getElementById('loginForm').reset();
+            document.getElementById('username').focus();
+        }
+        
+        /**
+         * Clear form new member
+         */
+        function clearNewMemberForm() {
+            // Use generic resetForm with preserveGeneratedCode = false
+            resetForm('pageNewMember', {
+                preserveDate: true, // Keep today's date as default
+                preserveGeneratedCode: false, // Clear generated codes
+                resetToDefault: true
+            });
+            
+            // Update field states after clearing
+            setTimeout(() => {
+                updateFieldStates();
+                showMessage('Form telah direset. Lengkapi Identity Information untuk melanjutkan.', 'info');
+            }, 100);
+        }
+        
+        /**
+         * Submit form new member
+         */
+        function submitNewMemberForm() {
+            // Use enhanced validation
+            if (!validateNewMemberForm()) {
+                return;
+            }
+
+            // Collect form data
+            const formData = {
+                identity: {
+                    idNumber: document.getElementById('idNumber').value.trim(),
+                    nik: document.getElementById('nik').value.trim(),
+                    fullName: document.getElementById('fullName').value.trim(),
+                    contact: document.getElementById('contact').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    gender: document.getElementById('gender').value,
+                    emergencyContact: document.getElementById('emergencyContact').value.trim(),
+                    joinDate: document.getElementById('joinDate').value,
+                    referralCode: document.getElementById('referralCode').value.trim(),
+                    membershipCode: document.getElementById('membershipCodeDisplay').value.trim()
+                },
+                plan: {
+                    membershipType: document.getElementById('membershipType').value,
+                    discount: document.getElementById('discount').value,
+                    personalTrainer: document.getElementById('ptSelect').value,
+                    ptSessions: document.getElementById('ptSessions').value,
+                    classType: document.getElementById('classSelect').value,
+                    classSessions: document.getElementById('classSessions').value
+                },
+                fees: {
+                    membershipFee: document.getElementById('membershipFee').textContent,
+                    ptFee: document.getElementById('ptFee').textContent,
+                    classFee: document.getElementById('classFee').textContent,
+                    additionalFee: document.getElementById('additionalFee').textContent,
+                    totalDiscount: document.getElementById('totalDiscount').textContent,
+                    totalFee: document.getElementById('totalFee').textContent
+                },
+                payment: {
+                    method: document.getElementById('paymentMethod').value
+                },
+                submittedAt: new Date().toISOString()
+            };
+
+            // Show loading state
+            const submitBtn = document.getElementById('submitFormBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            submitBtn.disabled = true;
+
+            // Submit to Apps Script
+            fetch(webAppUrl, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "submitMember",
+                    formData: formData
+                })
+            })
+            .then(res => res.json())
+            .then(response => {
+                if (response.status === 'success') {
+                    alert(response.message);
+                    resetFormNewMember();
+                } else {
+                    alert('Gagal: ' + response.message);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Gagal menghubungi server / masalah jaringan.');
+            });
+
+            // Reset button after 5 seconds if no response
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 5000);
+        }
+        
+        // ====================
+        // EVENT LISTENERS
+        // ====================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Toggle Password Visibility
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            // 2. Auto-fill Demo Account
+            document.querySelectorAll('.demo-accounts p').forEach(item => {
+                item.addEventListener('click', function() {
+                    const text = this.textContent;
+                    const match = text.match(/(\w+)\s\/\s(\w+)/);
+                    
+                    if (match) {
+                        document.getElementById('username').value = match[1];
+                        document.getElementById('password').value = match[2];
+                        showMessage(`Akun ${match[1]} telah diisi. Klik tombol login untuk melanjutkan.`, 'info');
+                    }
+                });
+            });
+            
+            // 3. Login Form Submission
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value.trim();
+                const loginButton = document.getElementById('loginButton');
+                const originalButtonText = loginButton.innerHTML;
+                
+                if (!username || !password) {
+                    showMessage('Harap isi username dan password!', 'error');
+                    return;
+                }
+                
+                loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memverifikasi akses Gym Keeper...';
+                loginButton.disabled = true;
+                
+                // Call Google Apps Script login function
+                fetch(webAppUrl, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        action: "login",
+                        username: username,
+                        password: password
+                    })
+                })
+                .then(res => res.json())
+                .then(response => {
+                    if (response.status === 'success') {
+                        showDashboard(response.userData);
+                    } else {
+                        showLoginError(response.message);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    showLoginError('Terjadi kesalahan koneksi server Google / CORS.');
+                });
+            });
+            
+            // 4. Sidebar Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const page = this.dataset.page;
+                    switchPage(page);
+                });
+            });
+            
+            // 5. Menu Card Navigation
+            document.querySelectorAll('.menu-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const page = this.dataset.page;
+                    switchPage(page);
+                });
+            });
+            
+            // 6. Back to Menu Button
+            document.getElementById('backToMenu').addEventListener('click', function() {
+                switchPage('home');
+            });
+            
+            // 7. Logout Button
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                const membershipCode = document.getElementById('membershipCodeDisplay').value.trim();
+                const isCodeGenerated = membershipCode !== '' && membershipCode !== 'Tekan tombol Generate';
+                
+                if (currentPage === 'newMember' && (isNewMemberFormDirty || isCodeGenerated)) {
+                    showConfirmModal(
+                        '<div style="margin-bottom: 15px;">' +
+                        '<i class="fas fa-exclamation-circle" style="color: #dc3545; font-size: 2.5rem; display: block; margin-bottom: 10px;"></i>' +
+                        '<strong style="display: block; margin-bottom: 10px; font-size: 1.1rem; color: #dc3545;">PERINGATAN: Data Form Belum Disimpan!</strong>' +
+                        '</div>' +
+                        'Form New Member memiliki data yang belum disimpan.<br>' +
+                        'Kode membership akan tetap tersimpan untuk sesi berikutnya.<br><br>' + // UBAH PESAN INI
+                        '<strong>Apakah Anda yakin ingin logout?</strong>',
+                        function() {
+                            // Hanya reset form TANPA menghapus code
+                            resetForm('pageNewMember', {
+                                preserveDate: true,
+                                preserveGeneratedCode: true, // PRESERVE CODE!
+                                resetToDefault: false
+                            });
+                            
+                            isNewMemberFormDirty = false;
+                            showMessage('Logout berhasil! Kode membership tetap tersimpan.', 'success'); // UBAH PESAN
+                            setTimeout(() => {
+                                switchToLogin();
+                            }, 800);
+                        },
+                        function() {
+                            showMessage('Logout dibatalkan', 'info');
+                        },
+                        'Ya, Logout',
+                        'Batal'
+                    );
+                } else {
+                    // Normal logout confirmation
+                    showConfirmModal(
+                        'Anda akan keluar dari sistem Gym Keeper.<br><br>' +
+                        '<strong>Apakah Anda yakin ingin logout?</strong>',
+                        function() {
+                            showMessage('Logout berhasil!', 'success');
+                            setTimeout(() => {
+                                switchToLogin();
+                            }, 500);
+                        },
+                        function() {
+                            showMessage('Logout dibatalkan', 'info');
+                        },
+                        'Ya, Logout',
+                        'Batal'
+                    );
+                }
+            });
+            
+            // 8. New Member Form Events
+            
+            // Generate membership code
+            document.getElementById('generateCodeBtn').addEventListener('click', function() {
+                generateMembershipCode();
+            });
+            
+            // Auto-calculate fees when inputs change
+            ['membershipType', 'discount', 'ptSelect', 'ptSessions', 'classSelect', 'classSessions'].forEach(id => {
+                document.getElementById(id).addEventListener('change', calculateFees);
+            });
+            
+            // Clear form button
+            document.getElementById('clearFormBtn').addEventListener('click', function() {
+                const membershipCode = document.getElementById('membershipCodeDisplay').value.trim();
+                const isCodeGenerated = membershipCode !== '' && membershipCode !== 'Tekan tombol Generate';
+                
+                if (isNewMemberFormDirty || isCodeGenerated) {
+                    showConfirmModal(
+                        'Anda akan menghapus semua data yang telah diisi dalam form.<br><br><strong>Apakah Anda yakin ingin melanjutkan?</strong>',
+                        function() {
+                            clearNewMemberForm();
+                            showMessage('Form telah dibersihkan', 'success');
+                        },
+                        function() {
+                            showMessage('Clear form dibatalkan', 'info');
+                        },
+                        'Ya, Clear All',
+                        'Batal'
+                    );
+                } else {
+                    clearNewMemberForm();
+                }
+            });
+            
+            // Submit form button
+            document.getElementById('submitFormBtn').addEventListener('click', submitNewMemberForm);
+            
+            // 9. Auto-focus on username
+            document.getElementById('username').focus();
+            
+            // 10. Set today's date as default for join date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('joinDate').value = today;
+
+            const pageNewMember = document.getElementById('pageNewMember');
+            if (pageNewMember) {
+                const formInputs = pageNewMember.querySelectorAll('input:not([readonly]), select, textarea');
+                formInputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        isNewMemberFormDirty = true;
+                    });
+                    input.addEventListener('change', () => {
+                        isNewMemberFormDirty = true;
+                    });
+                });
+            }
+
+            // 11A. Input validation for identity fields with real-time state updates
+            const identityFields = ['nik', 'fullName', 'gender', 'email', 'contact', 'emergencyContact', 'joinDate'];
+
+            identityFields.forEach(fieldId => {
+                const input = document.getElementById(fieldId);
+                if (input) {
+                    // Add validation based on field type
+                    if (fieldId === 'nik' || fieldId === 'contact' || fieldId === 'emergencyContact') {
+                        input.addEventListener('input', function(e) {
+                            this.value = this.value.replace(/\D/g, '');
+                            updateFieldStates();
+                            isNewMemberFormDirty = true;
+                        });
+                        
+                        input.addEventListener('keypress', function(e) {
+                            const charCode = (e.which) ? e.which : e.keyCode;
+                            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                                e.preventDefault();
+                                return false;
+                            }
+                            return true;
+                        });
+                    } else if (fieldId === 'fullName') {
+                        input.addEventListener('input', function(e) {
+                            this.value = this.value.replace(/[^a-zA-Z\sàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝŸ]/g, '');
+                            updateFieldStates();
+                            isNewMemberFormDirty = true;
+                        });
+                    } else {
+                        input.addEventListener('input', function() {
+                            updateFieldStates();
+                            isNewMemberFormDirty = true;
+                        });
+                    }
+                    
+                    input.addEventListener('change', function() {
+                        updateFieldStates();
+                        isNewMemberFormDirty = true;
+                    });
+                }
+            });
+
+            // For gender select
+            const genderSelect = document.getElementById('gender');
+            if (genderSelect) {
+                genderSelect.addEventListener('change', function() {
+                    updateFieldStates();
+                    isNewMemberFormDirty = true;
+                });
+            }
+            
+            // 11B. Input hanya huruf untuk Nama Lengkap
+            const nameInput = document.getElementById('fullName');
+            if (nameInput) {
+                nameInput.addEventListener('input', function(e) {
+                    // Hanya izinkan huruf dan spasi (termasuk karakter khusus seperti é, ü, dll)
+                    this.value = this.value.replace(/[^a-zA-Z\sàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝŸ]/g, '');
+                });
+                
+                nameInput.addEventListener('keypress', function(e) {
+                    // Blokir input angka pada keypress
+                    const charCode = (e.which) ? e.which : e.keyCode;
+                    // Blokir angka (48-57) dan simbol lainnya kecuali spasi (32)
+                    if ((charCode >= 48 && charCode <= 57) || 
+                        (charCode < 65 || charCode > 90) && 
+                        (charCode < 97 || charCode > 122) && 
+                        charCode !== 32 && charCode !== 8) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    return true;
+                });
+            }
+            // 12. PT & Class session availability
+            document.getElementById('ptSelect').addEventListener('change', updateSessionAvailability);
+            document.getElementById('classSelect').addEventListener('change', updateSessionAvailability);
+
+            // 13. Initialize session availability on page load
+            updateSessionAvailability();
+
+            // 14. Add input event listeners for real-time fee calculation
+            document.getElementById('membershipType').addEventListener('change', function() {
+                calculateFees();
+                isNewMemberFormDirty = true;
+            });
+
+            document.getElementById('discount').addEventListener('change', function() {
+                calculateFees();
+                isNewMemberFormDirty = true;
+            });
+
+            document.getElementById('paymentMethod').addEventListener('change', function() {
+                calculateFees();
+                isNewMemberFormDirty = true;
+            });
+            // 15. Membership Type change event - Enable/disable dependent fields
+            document.getElementById('membershipType').addEventListener('change', function() {
+                updateFieldStates(); // Update all dependent field states
+                calculateFees();
+                isNewMemberFormDirty = true;
+                
+                // Show success message when membership is selected
+                if (this.value) {
+                    showMessage('Membership type dipilih. Field tambahan sekarang tersedia.', 'success');
+                }
+            });
+            // 16. Initialize on page load
+            document.addEventListener('DOMContentLoaded', function() {                
+                // Initialize field states (will disable membership type initially)
+                updateFieldStates();
+                
+                // Initialize payment options
+                updatePaymentMethodStatus();
+                
+                // Initialize minimal fee display
+                calculateFees();
+                
+                // Add initial hint message
+                setTimeout(() => {
+                    if (!checkIdentityComplete()) {
+                        showMessage('Lengkapi Identity Information untuk membuka opsi Membership', 'info');
+                    }
+                }, 1000);
+            });
+            // 16A. Payment method select change
+            document.getElementById('paymentMethod').addEventListener('change', function() {
+                calculateFees();
+                updatePaymentMethodStatus();
+                isNewMemberFormDirty = true;
+            });
+        });
+    </script>
+</body>
+</html>
