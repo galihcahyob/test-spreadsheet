@@ -3316,24 +3316,15 @@
             // Submit to Apps Script
             fetch(webAppUrl, {
                 method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
                 body: JSON.stringify({
                     action: "submitMember",
                     formData: formData
                 })
             })
             .then(res => res.json())
-            .then(response => {
-                if (response.status === 'success') {
-                    alert(response.message);
-                    resetFormNewMember();
-                } else {
-                    alert('Gagal: ' + response.message);
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                alert('Gagal menghubungi server / masalah jaringan.');
-            });
 
             // Reset button after 5 seconds if no response
             setTimeout(() => {
@@ -3397,6 +3388,9 @@
                 // Call Google Apps Script login function
                 fetch(webAppUrl, {
                     method: "POST",
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
                     body: JSON.stringify({
                         action: "login",
                         username: username,
@@ -3404,17 +3398,6 @@
                     })
                 })
                 .then(res => res.json())
-                .then(response => {
-                    if (response.status === 'success') {
-                        showDashboard(response.userData);
-                    } else {
-                        showLoginError(response.message);
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    showLoginError('Terjadi kesalahan koneksi server Google / CORS.');
-                });
             });
             
             // 4. Sidebar Navigation
